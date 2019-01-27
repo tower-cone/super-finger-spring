@@ -1,6 +1,8 @@
 package towercone.superfingerspring;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.jooq.DSLContext;
+import org.jooq.JSONFormat;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.springframework.boot.SpringApplication;
@@ -26,8 +28,12 @@ public class SuperFingerSpringApplication {
 	@RequestMapping("/sections")
 	@ResponseBody
 	String sections() {
-		return create.select().from(Sections.SECTIONS).fetch().formatJSON();
+		return create.select().from(Sections.SECTIONS).fetch().formatJSON(jsonFormat);
 	}
+
+	private static JSONFormat jsonFormat = new JSONFormat()
+			.header(false)
+			.recordFormat(JSONFormat.RecordFormat.OBJECT);
 
 	private static Connection conn;
 	private static DSLContext create;
