@@ -1,19 +1,17 @@
 package towercone.superfingerspring;
 
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import towercone.superfingerspring.tables.Sections;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.List;
 
 @Controller
 @SpringBootApplication
@@ -25,6 +23,15 @@ public class SuperFingerSpringApplication {
 		return "Hello World!";
 	}
 
+	@RequestMapping("/sections")
+	@ResponseBody
+	String sections() {
+		return create.select().from(Sections.SECTIONS).fetch().formatJSON();
+	}
+
+	private static Connection conn;
+	private static DSLContext create;
+
 	public static void main(String[] args) {
 		SpringApplication.run(SuperFingerSpringApplication.class, args);
 
@@ -33,21 +40,10 @@ public class SuperFingerSpringApplication {
 		String password = "7d9f99b82a7cf10dc88bccad8f4511b61df9a206e8ff72e2ebc6974c7d260f6b";
 
 		try {
-			//Class.forName("com.example.jdbc.Driver");
 			Class.forName("org.postgresql.Driver");
+			conn = DriverManager.getConnection(url, userName, password);
+			create = DSL.using(conn, SQLDialect.POSTGRES);
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		try (Connection conn = DriverManager.getConnection(url, userName, password)) {
-			DSLContext create = DSL.using(conn, SQLDialect.POSTGRES);
-			Result<Record> result = create.select().from(Sections.SECTIONS).fetch();
-			for (Record record : result) {
-				String title = record.getValue(Sections.SECTIONS.TITLE);
-				System.out.println(title);
-			}
-		}
-		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
