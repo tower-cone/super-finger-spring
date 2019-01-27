@@ -43,6 +43,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<!-- to generate: mvn jooq-codegen:generate -X -->
 			<plugin>
 				<groupId>org.jooq</groupId>
 				<artifactId>jooq-codegen-maven</artifactId>
@@ -73,7 +74,7 @@
 					<!-- JDBC connection parameters -->
 					<jdbc>
 						<driver>org.postgresql.Driver</driver>
-						<url>jdbc:postgresql://ec2-54-235-68-3.compute-1.amazonaws.com:5432/d4vsm153jo7vn8</url>
+						<url>jdbc:postgresql://ec2-54-235-68-3.compute-1.amazonaws.com:5432/d4vsm153jo7vn8?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory</url>
 						<user>juhwudhcgihmfg</user>
 						<password>7d9f99b82a7cf10dc88bccad8f4511b61df9a206e8ff72e2ebc6974c7d260f6b</password>
 					</jdbc>
